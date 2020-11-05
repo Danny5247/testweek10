@@ -8,12 +8,17 @@ const SecondScreen = ({ navigation }) => {
     navigation.navigate('This is Screen #1');
   }
 
+  const goToThird = () => {
+    navigation.navigate('This is Screen #3');
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
         Second Screen
         </Text>
+        <Button title="Go To Screen #3" 
+        onPress={goToThird} />
         <Button title="Go Back To Screen #1" 
         onPress={goBackToFirst} />
       <StatusBar style="auto" />
