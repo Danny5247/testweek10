@@ -1,28 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { TouchableOpacity, Image, SafeAreaView, FlatList, Button, StyleSheet, Text, View } from 'react-native';
 
-const FirstScreen = ({ navigation }) => {
+const FirstScreen = ({ route, navigation }) => {
 
-  const goToSecond = () => {
-    navigation.navigate('2# neercS si sihT');
+  const { items } = route.params;
+
+  useEffect ( () => {
+    console.log(items)
+  })
+
+  const goToSecond = (item) => {
+    navigation.navigate('2# neercS si sihT', {name: item.name, image: item.image});
   }
 
   const goToThird = () => {
     navigation.navigate('This is Screen #3');
   }
 
+  const itemRow = ({ item }) => (
+    <TouchableOpacity
+     style={styles.cell}
+     onPress={() => goToSecond(item)}
+    >
+
+      <Image style={styles.image}source={item.image} />
+    </TouchableOpacity>
+  )
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        First Screen
-        </Text>
-        <Button title="Go To Screen #2" 
-        onPress={goToSecond} />
-        <Button title="Go To Screen #3" 
-        onPress={goToThird} />
+    <SafeAreaView style={styles.grid}>
+      <FlatList
+        contentContainerStyle={styles.grid}
+        data={items}
+        renderItem={itemRow}
+        keyExtractor={item => item.id}
+      />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 export default FirstScreen;
@@ -31,11 +46,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  grid: {
+    flex: 1,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
   },
   title: {
-    fontSize: 60,
-    marginBottom: 35,
-  }
+    fontSize: 24,
+    marginLeft: 20,
+  },
+  cell: {
+    width: 125,
+    height: 125,
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+  image: {
+    width: 125,
+    height: 125,
+  },
 });

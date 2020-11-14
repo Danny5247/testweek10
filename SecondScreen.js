@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Image, Button, StyleSheet, Text, View } from 'react-native';
 
-const SecondScreen = ({ navigation }) => {
+const SecondScreen = ({ navigation, route }) => {
+
+  const { name, image } = route.params;
+
 
   const goBackToFirst = () => {
     navigation.navigate('This is Screen #1');
@@ -14,8 +17,9 @@ const SecondScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Image style={styles.image} source={image} />
       <Text style={styles.title}>
-        Second Screen
+        {name}
         </Text>
         <Button title="Go To Screen #3" 
         onPress={goToThird} />
@@ -32,10 +36,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   title: {
     fontSize: 50,
     marginBottom: 35,
+  },  
+  image: {
+    width: '100%',
+    height: 250,
+    resizeMode: 'cover',
+    marginBottom: 10,
   }
 });
