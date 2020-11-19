@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
+import { View, Alert, StyleSheet } from 'react-native';
+import { Button } from 'react-native-elements';
+
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import FirstScreen from './FirstScreen';
 import SecondScreen from './SecondScreen';
@@ -10,18 +19,75 @@ const Stack = createStackNavigator();
 
 const App = () => {
 
-  const [items, setItems] = useState ([
-    {id: 1, name: 'First Item', image: require('./assets/Logoless.png')},
-    {id: 2, name: 'Second Item', image: require('./assets/Fight.jpg')},
-    {id: 3, name: 'Third Item', image: require('./assets/Mistake.png')},
-    {id: 4, name: 'fourth Item', image: require('./assets/Logoless.png')},
-    {id: 5, name: 'fifth Item', image: require('./assets/Fight.jpg')},
-    {id: 6, name: 'sixth Item', image: require('./assets/Mistake.png')},
-    {id: 7, name: 'seventh Item', image: require('./assets/Logoless.png')},
-    {id: 8, name: 'eighth Item', image: require('./assets/Fight.jpg')},
-    {id: 9, name: 'ninth Item', image: require('./assets/Mistake.png')},
-  ])
+  const [cameraPermission, askForCameraPermission] = Permissions.usePermissions(Permissions.CAMERA, {ask: true});
+  const [cameraRollPermission, askForCameraRollPermission] = Permissions.usePermissions(Permissions.CAMERA_ROLL, {ask: true});
 
+  const [items, setItems] = useState ([])
+
+  useEffect( () => {
+    if (items.length != 0)
+    storeData(items);
+  });
+
+  const storeData = async (items) => {
+    try {
+      const json = JSON.stringify(items)
+      await AsyncStorage.setItem('@items', json)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+
+  const pickPhoto = async() => {
+    if (cameraRollPermission.status == 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        base64: true
+      });
+
+      if (result.base64) {
+        const item = {
+            image: result.base64
+          }
+            setItems([...items, item]);
+        }
+    }
+    else {
+      askForCameraRollPermission()
+    }
+  }
+
+
+  const takePhoto = async() => {
+    if (cameraPermission.status == 'granted') {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        base64: true
+      });
+
+      if (result.uri) {
+        if (cameraRollPermission.status == 'granted') {
+          MediaLibrary.saveToLibraryAsync(result.uri);
+          const item = {
+            image: result.base64
+          }
+            setItems([...items, item]);
+        }
+      }
+
+    }
+    else {
+      askForCameraPermission()
+    }
+  }
 
   return (
     <NavigationContainer>
@@ -30,7 +96,21 @@ const App = () => {
         <Stack.Screen 
           name= "This is Screen #1"
           component={FirstScreen}
-          initialParams={{items: items}}
+          options={{
+            headerRight: () => (
+              <View style={styles.buttons}>
+                <Button
+                  title="Camera"
+                  onPress={takePhoto} 
+               />
+                <Button
+                  title="Library"
+                  onPress={pickPhoto} 
+                  buttonStyle={styles.libraryButton}
+               />
+               </View>
+            )
+          }}
          />
 
         <Stack.Screen
@@ -48,3 +128,17 @@ const App = () => {
   );
 }
 export default App;
+
+const styles = StyleSheet.create({
+  buttons: {
+    marginRight: 20,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+
+  libraryButton: {
+    marginLeft: 5,
+  }
+})

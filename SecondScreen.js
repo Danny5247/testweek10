@@ -17,7 +17,7 @@ const SecondScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={image} />
+      <Image style={styles.image} source={{ uri: 'data:image/jpeg;base64,' + image }} />
       <Text style={styles.title}>
         {name}
         </Text>
