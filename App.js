@@ -11,9 +11,9 @@ import * as MediaLibrary from 'expo-media-library';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import FirstScreen from './FirstScreen';
-import SecondScreen from './SecondScreen';
-import ThirdScreen from './ThirdScreen';
+import Home from './Home';
+import Library from './Library';
+import Details from './Details';
 
 const Stack = createStackNavigator();
 
@@ -93,9 +93,14 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen 
-          name= "This is Screen #1"
-          component={FirstScreen}
+      <Stack.Screen
+          name= "Home"
+          component={Home}
+        />
+
+          <Stack.Screen 
+          name= "App Library"
+          component={Library}
           options={{
             headerRight: () => (
               <View style={styles.buttons}>
@@ -104,7 +109,7 @@ const App = () => {
                   onPress={takePhoto} 
                />
                 <Button
-                  title="Library"
+                  title="Phone Library"
                   onPress={pickPhoto} 
                   buttonStyle={styles.libraryButton}
                />
@@ -114,15 +119,10 @@ const App = () => {
          />
 
         <Stack.Screen
-          name= "2# neercS si sihT"
-          component={SecondScreen}
+          name= "Photo Details"
+          component={Details}
         />
 
-        <Stack.Screen
-          name= "This is Screen #3"
-          component={ThirdScreen}
-        />
-        
       </Stack.Navigator>
     </NavigationContainer>
   );

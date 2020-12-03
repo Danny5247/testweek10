@@ -2,18 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image, Button, StyleSheet, Text, View } from 'react-native';
 
-const SecondScreen = ({ navigation, route }) => {
+const Details = ({ navigation, route }) => {
 
   const { name, image } = route.params;
 
 
-  const goBackToFirst = () => {
-    navigation.navigate('This is Screen #1');
+  const goToLibrary = () => {
+    navigation.navigate('App Library');
   }
 
-  const goToThird = () => {
-    navigation.navigate('This is Screen #3');
-  }
+
+
 
   return (
     <View style={styles.container}>
@@ -21,15 +20,13 @@ const SecondScreen = ({ navigation, route }) => {
       <Text style={styles.title}>
         {name}
         </Text>
-        <Button title="Go To Screen #3" 
-        onPress={goToThird} />
-        <Button title="Go Back To Screen #1" 
-        onPress={goBackToFirst} />
+        <Button title="Go back to Library" 
+        onPress={goToLibrary} />
       <StatusBar style="auto" />
     </View>
   );
 }
-export default SecondScreen;
+export default Details;
 
 const styles = StyleSheet.create({
   container: {

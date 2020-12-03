@@ -4,7 +4,7 @@ import { ScrollView, TouchableOpacity, Image, SafeAreaView, StyleSheet } from 'r
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const FirstScreen = ({ route, navigation }) => {
+const Library = ({ route, navigation }) => {
 
   const [ items, setitems ] = useState([]);
 
@@ -26,18 +26,15 @@ const getData = async () => {
   }
 }
 
-  const goToSecond = (item) => {
-    navigation.navigate('2# neercS si sihT', {name: item.name, image: item.image});
+  const Details = (item) => {
+    navigation.navigate('Photo Details', {name: item.name, image: item.image});
   }
 
-  const goToThird = () => {
-    navigation.navigate('This is Screen #3');
-  }
 
   const itemCell = (item, index) => (
     <TouchableOpacity
      style={styles.cell}
-     onPress={() => goToSecond(item)}
+     onPress={() => Details(item)}
      key={index}
     >
 
@@ -58,7 +55,7 @@ const getData = async () => {
     </SafeAreaView>
   );
   }
-export default FirstScreen;
+export default Library;
 
 const styles = StyleSheet.create({
   container: {

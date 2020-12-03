@@ -2,30 +2,26 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-const ThirdScreen = ({ navigation }) => {
+const Home = ({ navigation }) => {
 
-  const goToSecond = () => {
-    navigation.navigate('2# neercS si sihT');
+  const goToLibrary = () => {
+    navigation.navigate('App Library');
   }
 
-  const goBackToFirst = () => {
-    navigation.navigate('This is Screen #1');
-  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        Third Screen
+        Home Screen
         </Text>
-        <Button title="Go Back To Screen #1" 
-        onPress={goBackToFirst} />
-        <Button title="Go To Screen #2" 
-        onPress={goToSecond} />
+        <Button title="Go to Library" 
+        onPress={goToLibrary} />
+
       <StatusBar style="auto" />
     </View>
   );
 }
-export default ThirdScreen;
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
